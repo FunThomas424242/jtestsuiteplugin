@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="feature_export" name="build">
+	<target name="feature_export">
+		<pde.exportFeatures destination="tmp" 
+			exportSource="false" 
+			exportType="zip" 
+			features="junitsupport.feature" 
+			filename="junitsupport.zip" 
+			qualifier="SNAPSHOT" 
+			useJARFormat="true"/>
+	</target>
+</project>
