@@ -10,8 +10,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 public @interface TestSuite {
     
+	public String name() default "GeneratedTestSuite";
+	public String packageName() default "tests";
+	public String[] categories() default {"Integration","Modul"};
     public String parent() default "org.junit.runners.Suite";
     		
-    public String[] categories() default {"Integration","Modul"};
+    
 
 }
