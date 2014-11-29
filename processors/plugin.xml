@@ -3,10 +3,11 @@
 <plugin>
    <extension
          point="org.eclipse.jdt.apt.core.annotationProcessorFactory">
-      <factories enableDefault="true">
-	      <factory
-	         class="gh.funthomas424242.junitsupport.processors.TestSuiteProcessor">
-	      </factory>
-      </factories>
+      <java6processors
+            enableDefault="true">
+         <java6processor
+               class="gh.funthomas424242.junitsupport.processors.TestSuiteProcessor">
+         </java6processor>
+      </java6processors>
    </extension>
 </plugin>

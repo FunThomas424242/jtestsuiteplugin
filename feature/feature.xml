@@ -18,23 +18,24 @@
    </license>
 
    <requires>
+      <import plugin="javax.annotation"/>
       <import plugin="org.eclipse.jdt.apt.core"/>
       <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="junitsupport.annotations" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="junitsupport.annotations"/>
    </requires>
 
    <plugin
          id="junitsupport.annotations"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.0.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="junitsupport.processors"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.0.0.qualifier"
          unpack="false"/>
 
 </feature>

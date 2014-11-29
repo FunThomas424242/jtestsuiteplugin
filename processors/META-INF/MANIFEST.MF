@@ -4,10 +4,10 @@ Bundle-Name: JUnitSupport Annotation Processors Plugin
 Bundle-SymbolicName: junitsupport.processors;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: FunThomas424242
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.eclipse.jdt.apt.core,
  org.eclipse.core.runtime,
- junitsupport.annotations;bundle-version="1.0.0"
+ junitsupport.annotations
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
-Export-Package: gh.funthomas424242.junitsupport.processors
+Export-Package: gh.funthomas424242.junitsupport.processors;uses:="javax.annotation.processing"
