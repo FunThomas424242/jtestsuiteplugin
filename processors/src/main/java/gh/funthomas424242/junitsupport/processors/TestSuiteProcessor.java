@@ -1,14 +1,15 @@
 package gh.funthomas424242.junitsupport.processors;
 
+import gh.funthomas424242.junitsupport.annotations.TestCategories;
 import gh.funthomas424242.junitsupport.annotations.TestSuite;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -20,13 +21,9 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
-import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
-import javax.lang.model.util.ElementFilter;
 import javax.tools.Diagnostic.Kind;
 import javax.tools.JavaFileObject;
 
@@ -35,7 +32,6 @@ import javax.tools.JavaFileObject;
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class TestSuiteProcessor extends AbstractProcessor {
 
-	private static final String GENERATED_BASE_PACKAGE = "gh.funthomas424242.testsuites";
 	private static final String GENERATED_BASE_TYPE = "GeneratedTestSuite";
 
 	private final static Logger LOG = Logger.getLogger(TestSuiteProcessor.class
@@ -43,6 +39,7 @@ public class TestSuiteProcessor extends AbstractProcessor {
 
 	private Messager messager;
 	private Filer filer;
+	private Map<String, Set<String>> categoryMap = new HashMap<String, Set<String>>();
 
 	public TestSuiteProcessor() {
 		super();
@@ -63,18 +60,60 @@ public class TestSuiteProcessor extends AbstractProcessor {
 
 		if (!roundEnv.processingOver()) {
 
+			// initialize Category Map
+			final Set<? extends Element> annotatedElements = roundEnv
+					.getElementsAnnotatedWith(TestCategories.class);
+			for (Element annotatedElement : annotatedElements) {
+				final TestCategories classAnnotation = annotatedElement
+						.getAnnotation(TestCategories.class);
+				if (classAnnotation != null) {
+					final String className = annotatedElement.asType()
+							.toString() + ".class";
+					final String[] categoryNames = classAnnotation.names();
+
+					for (int i = 0; categoryNames != null
+							&& i < categoryNames.length; i++) {
+						if (this.categoryMap.containsKey(categoryNames[i])) {
+							final Set<String> classNameSet = this.categoryMap
+									.get(categoryNames[i]);
+							classNameSet.add(className);
+							// only needed for HashSet
+							// because the hash has changed
+							// this.categoryMap.put(categoryNames[i],
+							// classNameSet);
+						} else {
+							final Set<String> classNameSet = new HashSet<String>();
+							classNameSet.add(className);
+							this.categoryMap
+									.put(categoryNames[i], classNameSet);
+						}
+					}
+				}
+			}
+
+			final Set<String> categories = this.categoryMap.keySet();
+			for (String category : categories) {
+				final StringBuffer buf = new StringBuffer();
+				buf.append("[" + category + "]:(");
+				final Set<String> classNames = this.categoryMap.get(category);
+				for (String className : classNames) {
+					buf.append(className);
+					buf.append(",");
+				}
+				buf.append(")");
+				LOG.info(buf.toString());
+			}
+
 			for (Element e : roundEnv.getRootElements()) {
 
 				TypeElement typDecl = findEnclosingTypeElement(e);
 				System.out.printf("\nScanning Type %s\n\n",
 						typDecl.getQualifiedName());
 
-				// for (Element ee : ElementFilter.methodsIn(typDecl
-				// .getEnclosedElements())) {
- 
-				TestSuite typAnnotation=typDecl.getAnnotation(TestSuite.class);
+				TestSuite typAnnotation = typDecl
+						.getAnnotation(TestSuite.class);
 				computeAnnotation(typDecl, typAnnotation);
-				
+
 				for (Element ee : typDecl.getEnclosedElements()) {
 
 					TestSuite annotation = ee.getAnnotation(TestSuite.class);
@@ -206,7 +245,16 @@ public class TestSuiteProcessor extends AbstractProcessor {
 		if (annotation != null) {
 			final String packageName = annotation.packageName();
 			final String className = annotation.name();
-			writeFile(typDecl, packageName, className);
+			final String[] categories = annotation.categories();
+			final Set<String> testClassNames = new HashSet<String>();
+			for (int i = 0; categories != null && i < categories.length; i++) {
+				final Set<String> tmpNames = this.categoryMap
+						.get(categories[i]);
+				if (tmpNames != null) {
+					testClassNames.addAll(tmpNames);
+				}
+			}
+			writeFile(typDecl, packageName, className, testClassNames);
 		}
 	}
 
@@ -223,7 +271,7 @@ public class TestSuiteProcessor extends AbstractProcessor {
 	}
 
 	private void writeFile(final Element element, final String packageName,
-			final String className) {
+			final String className, final Set<String> testClassNames) {
 
 		try {
 
@@ -233,7 +281,7 @@ public class TestSuiteProcessor extends AbstractProcessor {
 			final String fileName = packageName + "." + className;
 			final JavaFileObject fo = filer.createSourceFile(fileName, element);
 			final Writer w = fo.openWriter();
-			w.append(getCode(packageName, className));
+			w.append(getCode(packageName, className, testClassNames));
 			w.flush();
 			w.close();
 		} catch (final IOException ioe) {
@@ -242,14 +290,29 @@ public class TestSuiteProcessor extends AbstractProcessor {
 		}
 	}
 
-	protected String getCode(final String packageName, final String typeName) {
-		return "package " + packageName + ";\n\n"
-				+ "import org.junit.runner.RunWith;\n"
-				+ "import org.junit.runners.Suite;\n"
-				+ "import org.junit.runners.Suite.SuiteClasses;\n\n"
-				+ "@RunWith(Suite.class)\n"
-				+ "@SuiteClasses({ TestCaseTest1.class, TestClass.class })\n"
-				+ "public class " + typeName + " {\n\n" + "}\n";
+	protected String getCode(final String packageName,
+			final String classifierName, final Set<String> testClassNames) {
+		final StringBuffer buf = new StringBuffer();
+		buf.append("package " + packageName + ";\n\n");
+		buf.append("import org.junit.runner.RunWith;\n");
+		buf.append("import org.junit.runners.Suite;\n");
+		buf.append("import org.junit.runners.Suite.SuiteClasses;\n\n");
+		buf.append("@RunWith(Suite.class)\n");
+		buf.append("@SuiteClasses({ ");
+		boolean isFirstRun = true;
+		for (Iterator<String> iterator = testClassNames.iterator(); iterator
+				.hasNext();) {
+			if (isFirstRun) {
+				isFirstRun = false;
+			} else {
+				buf.append(",");
+			}
+			buf.append(iterator.next());
+		}
+		// TestCaseTest1.class, TestClass.class
+		buf.append("})\n");
+		buf.append("public class " + classifierName + " {\n\n" + "}\n");
+		return buf.toString();
 	}
 
 	private String getGeneratedFileName(final String packageName) {
