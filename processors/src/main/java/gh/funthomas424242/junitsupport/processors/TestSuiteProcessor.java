@@ -8,7 +8,6 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -23,12 +22,12 @@ import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.TypeMirror;
 import javax.tools.Diagnostic.Kind;
 import javax.tools.JavaFileObject;
 
-//@SupportedAnnotationTypes(value = { "gh.funthomas424242.junitsupport.annotations.TestSuite" })
-@SupportedAnnotationTypes(value = { "*" })
+@SupportedAnnotationTypes(value = {
+		"gh.funthomas424242.junitsupport.annotations.TestSuite",
+		"gh.funthomas424242.junitsupport.annotations.TestCategories" })
 @SupportedSourceVersion(SourceVersion.RELEASE_7)
 public class TestSuiteProcessor extends AbstractProcessor {
 
@@ -69,7 +68,7 @@ public class TestSuiteProcessor extends AbstractProcessor {
 				if (classAnnotation != null) {
 					final String className = annotatedElement.asType()
 							.toString() + ".class";
-					final String[] categoryNames = classAnnotation.names();
+					final String[] categoryNames = classAnnotation.categories();
 
 					for (int i = 0; categoryNames != null
 							&& i < categoryNames.length; i++) {
@@ -79,8 +78,8 @@ public class TestSuiteProcessor extends AbstractProcessor {
 							classNameSet.add(className);
 							// only needed for HashSet
 							// because the hash has changed
-							// this.categoryMap.put(categoryNames[i],
-							// classNameSet);
+							this.categoryMap
+									.put(categoryNames[i], classNameSet);
 						} else {
 							final Set<String> classNameSet = new HashSet<String>();
 							classNameSet.add(className);
@@ -122,129 +121,13 @@ public class TestSuiteProcessor extends AbstractProcessor {
 			}
 		}
 
-		// if (!roundEnv.processingOver()) {
-		//
-		// for (TypeElement annotation : annotations) {
-		//
-		// final Element typDecl = annotation.getEnclosingElement();
-		// System.out.printf("\nScanning Type %s\n\n",
-		// typDecl.getSimpleName());
-		//
-		// for (ExecutableElement ee : ElementFilter.methodsIn(typDecl
-		// .getEnclosedElements())) {
-		//
-		// TestSuite myanno = ee.getAnnotation(TestSuite.class);
-		//
-		// System.out.printf("%s Name value = %s\n",
-		// ee.getSimpleName(),
-		// myanno == null ? null : myanno.name());
-		// }
-		// }
-		// }
-
-		//
-		// // logInfo("AnnotationProcessor entry to process");
-		// // System.out.println("begin processing");
-		// for (final TypeElement annotation : annotations) {
-		// LOG.info("verarbeite annotation: " + annotation.getSimpleName());
-		// LOG.info("annotation name: " + annotation.getQualifiedName());
-		// LOG.info("TestSuite name: " + TestSuite.class.getName());
-		//
-		// final String annotationType = annotation.getQualifiedName()
-		// .toString();
-		// if (annotationType.equals(TestSuite.class.getName())) {
-		// LOG.info("ANNO GEFUNDEN !!!!!!!");
-		// try {
-		// Element delcTyp= annotation.getEnclosingElement();
-		// AnnotationMirror mirror = delcTyp.getAnnotationMirrors();
-		//
-		//
-		//
-		// LOG.info("Cast erfolgreich");
-		// } catch (Exception ex) {
-		// LOG.info(ex.toString());
-		// }
-		// }
-		// }
-
-		// Set<? extends Element> elements = roundEnv.getRootElements();
-		//
-		// for (Element element : elements) {
-		// LOG.info("Begin Element: " + element.getSimpleName());
-		//
-		// List<? extends AnnotationMirror> mirrors = element
-		// .getAnnotationMirrors();
-		// for (AnnotationMirror mirror : mirrors) {
-		//
-		// LOG.info("Anno Mirror: " + mirror.getAnnotationType());
-		// if (mirror.getAnnotationType().toString()
-		// .equals(TestSuite.class.getName())) {
-		//
-		// LOG.info("ANNO GEFUNDEN !!!!!!!");
-		// try {
-		// final Map<? extends ExecutableElement, ? extends AnnotationValue>
-		// valueMap = mirror
-		// .getElementValues();
-		// final Set<?> valueSet=valueMap.entrySet();
-		//
-		// final Map<String, AnnotationValue> parameterMap = new HashMap<String,
-		// AnnotationValue>();
-		//
-		// for( Map.Entry<? extends ExecutableElement, ? extends
-		// AnnotationValue> entry : mirror.getElementValues().entrySet() ) {
-		// if( “value”.equals( entry.getKey().getSimpleName().toString() ) ) {
-		// action = entry.getValue();
-		// break;
-		// }
-		// }
-		// for (final Object annoValue : valueSet) {
-		// LOG.info("annoValue: "+annoValue.toString());
-		// // final String key = annoValue.getKey().getSimpleName();
-		// // final AnnotationValue value = annoValue
-		// // .getValue();
-		// // parameterMap.put(key, value);
-		// }
-		// } catch (Exception ex) {
-		// LOG.info(ex.toString());
-		// }
-		//
-		// }
-		// }
-		// }
-
-		// if (annoTyp instanceof TestSuite) {
-		// LOG.info("ANNO Type is TestSuite ");
-		// }
-		//
-		// if
-		// (annotation.getQualifiedName().equals(TestSuite.class.getName()))
-		// {
-		// final TestSuite anno = (TestSuite) annotation;
-		// final String[] kategorien = anno.categories();
-		// for (int i = 0; i < kategorien.length; i++) {
-		// LOG.info("kategorie: " + kategorien[i]);
-		// }
-		// }
-		//
-
-		// final Set<? extends Element> elements = roundEnv
-		// .getElementsAnnotatedWith(annotation);
-		//
-		// for (final Element element : elements) {
-		// LOG.info("verarbeite element: " + element.getSimpleName()
-		// + " annotiert mit "
-		// + annotation.getTypeParameters().toString());
-		// writeFile(element);
-		// }
-		// }
-
-		return true;
+		return false;
 	}
 
 	private void computeAnnotation(TypeElement typDecl, TestSuite annotation) {
 		if (annotation != null) {
 			final String packageName = annotation.packageName();
-			final String className = annotation.name();
+			final String className = annotation.className();
 			final String[] categories = annotation.categories();
 			final Set<String> testClassNames = new HashSet<String>();
 			for (int i = 0; categories != null && i < categories.length; i++) {
@@ -274,10 +157,6 @@ public class TestSuiteProcessor extends AbstractProcessor {
 			final String className, final Set<String> testClassNames) {
 
 		try {
-
-			// final String fileName =
-			// getGeneratedFileName(GENERATED_BASE_PACKAGE);
-			// final String className = getGeneratedClassName();
 			final String fileName = packageName + "." + className;
 			final JavaFileObject fo = filer.createSourceFile(fileName, element);
 			final Writer w = fo.openWriter();

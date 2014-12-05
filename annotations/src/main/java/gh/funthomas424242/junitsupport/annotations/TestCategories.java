@@ -6,6 +6,6 @@ import java.lang.annotation.Target;
 @Target(value = { ElementType.TYPE })
 public @interface TestCategories {
 
-	public String[] names(); 
+	public String[] categories() default {"Modul", "Integration"}; 
 	
 }
