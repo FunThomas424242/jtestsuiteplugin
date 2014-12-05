@@ -6,36 +6,35 @@
       provider-name="FunThomas424242">
 
    <description url="http://www.example.com/description">
-      [Enter Feature Description here.]
+      This features realized a annotation processor for jtestsuitesupport
    </description>
 
    <copyright url="http://www.example.com/copyright">
-      [Enter Copyright Description here.]
+      LGPL v.3
    </copyright>
 
    <license url="http://www.example.com/license">
-      [Enter License Description here.]
+      GNU LGPL v.3
    </license>
 
    <requires>
       <import plugin="javax.annotation"/>
       <import plugin="org.eclipse.jdt.apt.core"/>
       <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="junitsupport.annotations"/>
    </requires>
 
    <plugin
          id="junitsupport.annotations"
          download-size="0"
          install-size="0"
-         version="1.0.0.qualifier"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="junitsupport.processors"
          download-size="0"
          install-size="0"
-         version="1.0.0.qualifier"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>

@@ -10,4 +10,4 @@ Require-Bundle: org.eclipse.jdt.apt.core,
  junitsupport.annotations
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
-Export-Package: gh.funthomas424242.junitsupport.processors;uses:="javax.annotation.processing"
+Export-Package: gh.funthomas424242.junitsupport.processors;uses:="javax.lang.model.element,javax.annotation.processing"
