@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>gh.funthomas424242.junitsupport</groupId>
+		<groupId>gh.funthomas424242.jtestsuiteplugin</groupId>
 		<artifactId>parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>

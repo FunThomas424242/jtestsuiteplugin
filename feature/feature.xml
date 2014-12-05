@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="junitsupport.feature"
-      label="JUnit Support Feature"
+      id="jtestsuiteplugin.feature"
+      label="JUnit Test Suite Feature"
       version="1.0.0.qualifier"
       provider-name="FunThomas424242">
 
-   <description url="http://www.example.com/description">
+   <description url="https://github.com/FunThomas424242/jtestsuiteplugin">
       This features realized a annotation processor for jtestsuitesupport
    </description>
 
-   <copyright url="http://www.example.com/copyright">
-      LGPL v.3
+   <copyright url="https://www.openhub.net/accounts/FunThomas424242">
+      authors
+FunThomas424242 (Thomas Schubert)
    </copyright>
 
-   <license url="http://www.example.com/license">
+   <license url="http://www.gnu.de/documents/lgpl.de.html">
       GNU LGPL v.3
    </license>
 
@@ -21,17 +22,18 @@
       <import plugin="javax.annotation"/>
       <import plugin="org.eclipse.jdt.apt.core"/>
       <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="jtestsuiteplugin.annotations" version="1.0.0" match="greaterOrEqual"/>
    </requires>
 
    <plugin
-         id="junitsupport.annotations"
+         id="jtestsuiteplugin.annotations"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="junitsupport.processors"
+         id="jtestsuiteplugin.processors"
          download-size="0"
          install-size="0"
          version="0.0.0"

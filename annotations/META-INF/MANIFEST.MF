@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JUnitSupport Annotation  Plugin
-Bundle-SymbolicName: junitsupport.annotations;singleton:=true
+Bundle-SymbolicName: jtestsuiteplugin.annotations;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: FunThomas424242
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
