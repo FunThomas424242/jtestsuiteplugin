@@ -57,18 +57,18 @@
 	</developers>
 
 	<scm>
-		<connection>scm:https://github.com/FunThomas424242/junitsupport.git</connection>
-		<developerConnection>scm:https://github.com/FunThomas424242/junitsupport.git</developerConnection>
-		<url>https://github.com/FunThomas424242/junitsupporte</url>
+		<connection>scm:https://github.com/FunThomas424242/jtestsuiteplugin.git</connection>
+		<developerConnection>scm:https://github.com/FunThomas424242/jtestsuiteplugin.git</developerConnection>
+		<url>https://github.com/FunThomas424242/jtestsuiteplugin</url>
 	</scm>
 
 	<ciManagement>
-		<url>https://travis-ci.org/FunThomas424242/junitsupport</url>
+		<url>https://travis-ci.org/FunThomas424242/jtestsuiteplugin</url>
 	</ciManagement>
 
 	<issueManagement>
 		<system>trac</system>
-		<url>https://github.com/FunThomas424242/junitsupport/issues</url>
+		<url>https://github.com/FunThomas424242/jtestsuiteplugin/issues</url>
 	</issueManagement>
 
 	<modules>
