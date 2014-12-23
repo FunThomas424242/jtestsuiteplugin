@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="feature_export" name="build">
 	<target name="feature_export">
-		<pde.exportFeatures destination="/home/huluvu424242/git/junitsupport/feature/tmp" exportSource="false" exportType="zip" features="junitsupport.feature" filename="junitsupport.zip" useJARFormat="true"/>
+		<pde.exportFeatures destination="/home/huluvu424242/git/jtestsuiteplugin/feature/tmp" exportSource="false" exportType="zip" features="jtestsuiteplugin.feature" filename="jtestsuiteplugin.zip" useJARFormat="true"/>
 	</target>
 </project>
