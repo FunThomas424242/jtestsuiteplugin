@@ -128,6 +128,7 @@ public class TestSuiteProcessor extends AbstractProcessor {
 		if (annotation != null) {
 			final String packageName = annotation.packageName();
 			final String className = annotation.className();
+			final String superClass = annotation.superClass();
 			final String[] categories = annotation.categories();
 			final Set<String> testClassNames = new HashSet<String>();
 			for (int i = 0; categories != null && i < categories.length; i++) {
@@ -137,7 +138,7 @@ public class TestSuiteProcessor extends AbstractProcessor {
 					testClassNames.addAll(tmpNames);
 				}
 			}
-			writeFile(typDecl, packageName, className, testClassNames);
+			writeFile(typDecl, packageName, className, superClass, testClassNames);
 		}
 	}
 
@@ -154,13 +155,13 @@ public class TestSuiteProcessor extends AbstractProcessor {
 	}
 
 	private void writeFile(final Element element, final String packageName,
-			final String className, final Set<String> testClassNames) {
+			final String className, final String superClass, final Set<String> testClassNames) {
 
 		try {
 			final String fileName = packageName + "." + className;
 			final JavaFileObject fo = filer.createSourceFile(fileName, element);
 			final Writer w = fo.openWriter();
-			w.append(getCode(packageName, className, testClassNames));
+			w.append(getCode(packageName, className, superClass, testClassNames));
 			w.flush();
 			w.close();
 		} catch (final IOException ioe) {
@@ -170,13 +171,13 @@ public class TestSuiteProcessor extends AbstractProcessor {
 	}
 
 	protected String getCode(final String packageName,
-			final String classifierName, final Set<String> testClassNames) {
+			final String classifierName, final String superClass, final Set<String> testClassNames) {
 		final StringBuffer buf = new StringBuffer();
 		buf.append("package " + packageName + ";\n\n");
 		buf.append("import org.junit.runner.RunWith;\n");
 		buf.append("import org.junit.runners.Suite;\n");
 		buf.append("import org.junit.runners.Suite.SuiteClasses;\n\n");
-		buf.append("@RunWith(Suite.class)\n");
+		buf.append("@RunWith("+superClass+")\n");
 		buf.append("@SuiteClasses({ ");
 		boolean isFirstRun = true;
 		for (Iterator<String> iterator = testClassNames.iterator(); iterator
