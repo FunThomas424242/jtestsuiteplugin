@@ -4,7 +4,7 @@ Bundle-Name: JUnit TestSuite Annotation Processors Plugin
 Bundle-SymbolicName: jtestsuiteplugin.processors;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: FunThomas424242
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.eclipse.jdt.apt.core,
  org.eclipse.core.runtime,
  jtestsuiteplugin.annotations;bundle-version="1.0.0"

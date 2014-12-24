@@ -2,77 +2,20 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-
-	<groupId>gh.funthomas424242.jtestsuiteplugin</groupId>
-	<artifactId>parent</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<parent>
+		<groupId>gh.funthomas424242.jtestsuiteplugin</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>parent</relativePath>
+	</parent>
+	
+	<artifactId>jtestsuiteplugin.aggregator</artifactId>
 	<packaging>pom</packaging>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<github.maventools.version>0.9</github.maventools.version>
-	</properties>
-
-	<profiles>
-		<profile>
-			<id>local</id>
-			<properties>
-				<github.global.server>github</github.global.server>
-				<testrun>true</testrun>
-			</properties>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-		</profile>
-		<profile>
-			<id>remote</id>
-			<properties>
-				<github.global.userName>${env.USER}</github.global.userName>
-				<github.global.password>${env.PASSWORD}</github.global.password>
-				<testrun>false</testrun>
-			</properties>
-		</profile>
-
-	</profiles>
-
-	<licenses>
-		<license>
-			<name> GNU LESSER GENERAL PUBLIC LICENSE</name>
-			<distribution>repo</distribution>
-			<url>http://www.gnu.org/licenses/lgpl-3.0.txt</url>
-		</license>
-	</licenses>
-
-	<developers>
-		<developer>
-			<id>funthomas424242</id>
-			<email>funthomas424242@gmail.com</email>
-			<name>Thomas Schubert</name>
-			<roles>
-				<role>project-owner</role>
-				<role>developer</role>
-			</roles>
-		</developer>
-	</developers>
-
-	<scm>
-		<connection>scm:https://github.com/FunThomas424242/jtestsuiteplugin.git</connection>
-		<developerConnection>scm:https://github.com/FunThomas424242/jtestsuiteplugin.git</developerConnection>
-		<url>https://github.com/FunThomas424242/jtestsuiteplugin</url>
-	</scm>
-
-	<ciManagement>
-		<url>https://travis-ci.org/FunThomas424242/jtestsuiteplugin</url>
-	</ciManagement>
-
-	<issueManagement>
-		<system>trac</system>
-		<url>https://github.com/FunThomas424242/jtestsuiteplugin/issues</url>
-	</issueManagement>
 
 	<modules>
 		<module>annotations</module>
 		<module>processors</module>
+		<module>feature</module>
+		<module>updatesite</module>
 	</modules>
 </project>
